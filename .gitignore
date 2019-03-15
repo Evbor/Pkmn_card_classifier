@@ -1,0 +1,8 @@
+/env/
+/logs/
+/data/**
+/data/cv.tfrecords
+!/data/key.txt
+!/data/pkmn_card_images.py
+/data/test.tfrecords
+/data/train.tfrecords
