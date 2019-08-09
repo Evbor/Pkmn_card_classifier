@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 import sklearn.model_selection as ms
 
+#######################
+## Data manipulation ##
+#######################
+
 def train_val_test_split(df, test_proportion, val_proportion, seed=None):
     """
     Split a DataFrame into train, validation, and test datasets.
@@ -20,6 +24,20 @@ def train_val_test_split(df, test_proportion, val_proportion, seed=None):
     df_val = pd.DataFrame({'filename': filenames_val, 'class': labels_val})
     df_test = pd.DataFrame({'filename': filenames_test, 'class': labels_test})
     return (df_train, df_val, df_test)
+
+
+
+def encode(label):
+    encoding = {'base_set': '1', 'not_base_set': '0'}
+    return encoding[label]
+
+def encode_dataframe(df):
+    df['class'] = df['class'].map(encode)
+    return df
+
+#########################################
+## Data preprocessing and augmentation ##
+#########################################
 
 def sample_dataset(dataset, samples_per_class=None, replacement=None, seed=None):
     """
@@ -44,11 +62,3 @@ def sample_dataset(dataset, samples_per_class=None, replacement=None, seed=None)
         sampled_df_per_c = samples_per_c.sample(n=samples_per_class[c], replace=replacement[c], random_state=seed)
         df_frames.append(sampled_df_per_c)
     return pd.concat(df_frames)
-
-def encode(label):
-    encoding = {'base_set': '1', 'not_base_set': '0'}
-    return encoding[label]
-
-def encode_dataframe(df):
-    df['class'] = df['class'].map(encode)
-    return df
