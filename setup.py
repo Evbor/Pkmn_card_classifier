@@ -19,12 +19,12 @@ setup(
 	classifiers=[
 		'Programming Language :: Python :: 3',
 	],
-	install_requires=[
-		'pypandoc>=1.4'
-	],
 	url='https://github.com/Evbor/Pkmn_card_classifier',
 	author='Evan Borras',
 	author_email='',
 	license='MIT',
 	packages=['base_set_classifier'],
+	install_requires=[
+		'pypandoc>=1.4'
+	]
 )
