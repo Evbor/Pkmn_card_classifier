@@ -21,9 +21,9 @@ class StartPipeline(luigi.WrapperTask):
 		processed_data = pd.read_csv(processed_csv)
 		unlabeled_data = pd.read_csv(unlabeled_csv)
 		if (len(raw_data) >= 200) or testing_pipeline:
-			yield MLModel()
+			yield LaunchApp()
 		elif len(unlabeled_data) >= 10:
-			yield Labeldatayoushitheads()
+			yield Labelyourdata()
 		elif
 if __name__ == '__main__':
 	luigi.run()
