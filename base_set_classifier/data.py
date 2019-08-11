@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import sklearn.model_selection as ms
@@ -5,6 +6,11 @@ import sklearn.model_selection as ms
 #######################
 ## Data manipulation ##
 #######################
+
+def imgs_exist(df, imgs_path):
+	if not set(df.filename).issubset(set(os.listdir(imgs_path))):
+		raise Exception('filenames in {0} do not exist in {1}'.format(csv_path, imgs_path))
+	return True
 
 def train_val_test_split(df, test_proportion, val_proportion, seed=None):
     """
