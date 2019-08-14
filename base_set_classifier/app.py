@@ -2,24 +2,54 @@ import os
 import sys
 import json
 import base64
+import uuid
 from io import BytesIO
 from keras.preprocessing import image
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/home/dev/Desktop/'
+IMG_FOLDER = '/home/dev/Desktop/'
+CSV_FOLDER = '/home/dev/'
 IMG_SIZE = (550, 400)
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['IMG_FOLDER'] = IMG_FOLDER
+app.config['CSV_FOLDER'] = CSV_FOLDER
 
 @app.route('/base_set_classifier/predict/', methods=['POST'])
 def base_set_classifier():
     for sample in request.form.getlist('samples'):
         img = image.load_img(BytesIO(base64.b64decode(sample['image'])), target_size=IMG_SIZE)
-        label = sample['label']
-        pkmn_card = sample['pkmn_card']
+        filename = get(sample, 'filename')
+        label = get(sample, 'label')
+        img_label = get(sample, 'img_label')
 
+        filename = gen_sec_fname(filename)
+
+        return None
+
+def get(d, key):
+    try:
+        user_key = d[key]
+    except KeyError:
+        user_key = None
+    return user_key
+
+def gen_sec_fname(filename, file_path):
+    if filename == None:
+        fname = unique_random_filename(file_path)
+        return fname
+    else:
+        fname = secure_filename(filename)
+        if (fname == ''):
+            fname = unique_random_filename(file_path)
+        return fname
+
+def unique_random_filename(file_path):
+    fname = str(uuid.uuid4())
+    while fname in set(os.listdir(file_path)):
+        fname = str(uuid.uuid4())
+    return str(uuid.uuid4())
 """
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():

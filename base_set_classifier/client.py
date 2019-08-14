@@ -16,8 +16,8 @@ b64_image_2 = ''
 with open(image_path_2, "rb") as imageFile:
     b64_image_2 = base64.b64encode(imageFile.read())
 
-data = {'samples': [{'image': b64_image_1, 'label': 'not_base_set', 'pkmn_card': True},
-                    {'image': b64_image_2, 'label': 'not_base_set', 'pkmn_card': False}]}
+data = {'samples': [{'image': b64_image_1, 'label': 'not_base_set', 'img_label': 'card'},
+                    {'image': b64_image_2, 'label': 'not_base_set', 'img_label': 'not_card'}]}
 
 r = requests.post(url=API_ENDPOINT, data=data)
 
