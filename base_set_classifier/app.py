@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 IMG_FOLDER = '/home/dev/Desktop/'
 CSV_FOLDER = '/home/dev/'
 IMG_SIZE = (550, 400)
+SPACE = True
 
 app = Flask(__name__)
 app.config['IMG_FOLDER'] = IMG_FOLDER
@@ -20,13 +21,31 @@ app.config['CSV_FOLDER'] = CSV_FOLDER
 def base_set_classifier():
     for sample in request.form.getlist('samples'):
         img = image.load_img(BytesIO(base64.b64decode(sample['image'])), target_size=IMG_SIZE)
-        filename = get(sample, 'filename')
-        label = get(sample, 'label')
-        img_label = get(sample, 'img_label')
+        # if there is enough space to store images
+        if SPACE:
+            # save image
+            filename = get(sample, 'filename')
+            filename = get_secure_filename(filename)
+            path = os.path.join(app.config['IMG_FOLDER'], filename)
+            img.save(path, format=img.format)
 
-        filename = gen_sec_fname(filename)
+            label = get(sample, 'label')
+            img_label = get(sample, 'img_label')
+            if check_img_label(img_label):
+                ### add file name to unlabeled csv_path
+            elif (label == None) and
 
         return None
+
+
+
+######## Helper functions
+
+def check_img_label(img_label):
+    if (img_label == 'pkmn_card') or (img_label == 'not_pkmn_card'):
+        return True
+    else:
+        return False
 
 def get(d, key):
     try:
@@ -35,19 +54,20 @@ def get(d, key):
         user_key = None
     return user_key
 
-def gen_sec_fname(filename, file_path):
+def get_secure_filename(filename, file_path):
     if filename == None:
         fname = unique_random_filename(file_path)
         return fname
     else:
         fname = secure_filename(filename)
-        if (fname == ''):
+        fname = os.path.splitext(fname)[0]
+        if (fname == '') or (fname in {i[0] for i in map(os.path.splitext, os.listdir(file_path))}):
             fname = unique_random_filename(file_path)
         return fname
 
 def unique_random_filename(file_path):
     fname = str(uuid.uuid4())
-    while fname in set(os.listdir(file_path)):
+    while fname in {i[0] for i in map(os.path.splitext, os.listdir(file_path))}:
         fname = str(uuid.uuid4())
     return str(uuid.uuid4())
 """
