@@ -28,7 +28,6 @@ parso==0.5.1
 pexpect==4.7.0
 pickleshare==0.7.5
 pkg-resources==0.0.0
--e git+https://github.com/Evbor/Pkmn_card_classifier.git@f739549c1cf6957641debde0d0118048bd90c6d6#egg=Pokemon_card_image_classifier
 prometheus-client==0.7.1
 prompt-toolkit==2.0.9
 ptyprocess==0.6.0
